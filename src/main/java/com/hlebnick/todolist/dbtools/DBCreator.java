@@ -16,7 +16,7 @@ public class DBCreator {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     public static void main(String[] args) {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("file:src/main/webapp//WEB-INF/spring/application-context.xml");
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("file:src/main/webapp/WEB-INF/spring/application-context.xml");
         DBCreator dbCreator = new DBCreator();
         dbCreator.setJdbcTemplate((NamedParameterJdbcTemplate) applicationContext.getBean("jdbcTemplate"));
         dbCreator.run();

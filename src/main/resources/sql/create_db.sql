@@ -3,7 +3,7 @@ drop table if exists todo_list;
 drop table if exists todo_item;
 
 create table users(
-  id int primary key,
+  id int auto_increment primary key,
   email varchar(255),
   password varchar(128)
 );
