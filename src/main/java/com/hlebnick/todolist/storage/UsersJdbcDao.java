@@ -4,7 +4,11 @@ import com.hlebnick.todolist.dao.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -47,6 +51,23 @@ public class UsersJdbcDao implements UsersDao {
 
     @Override
     public int addUser(User user) {
-        return 0;
+        log.debug("Adding new user to database");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("email", user.getEmail());
+        params.put("password", user.getPassword());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        SqlParameterSource parameterSource = new MapSqlParameterSource(params);
+
+        jdbcTemplate.update(
+                "insert into users (email, password) values (:email, :password)",
+                parameterSource,
+                keyHolder
+        );
+
+        int id = keyHolder.getKey().intValue();
+        log.info("User [" + user.getEmail() + "] was inserted to database with id [" + id + "]");
+        return id;
     }
 }
