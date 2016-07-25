@@ -6,7 +6,7 @@ create table users(
   id int primary key,
   email varchar(255),
   password varchar(128)
-)
+);
 
 create table todo_list(
   id int primary key,

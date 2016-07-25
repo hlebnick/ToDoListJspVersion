@@ -3,7 +3,6 @@ package com.hlebnick.todolist.dbtools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -18,7 +17,7 @@ public class DBCreator {
 
     public static void main(String[] args) {
         try {
-            Connection connection = getConnection();
+            Connection connection = new DBCreator().getConnection();
             String sql = SqlLoader.getInstance().load("sql/create_db.sql");
 
             Statement st = connection.createStatement();
@@ -33,13 +32,13 @@ public class DBCreator {
         }
     }
 
-    private static Connection getConnection() throws ClassNotFoundException,
+    private Connection getConnection() throws ClassNotFoundException,
             IllegalAccessException, InstantiationException, SQLException {
 
         Properties prop = new Properties();
         InputStream input = null;
         try {
-            input = new FileInputStream("config.properties");
+            input = getClass().getClassLoader().getResourceAsStream("application.properties");
             prop.load(input);
 
             Class.forName(prop.getProperty("jdbc.driverClassName")).newInstance();
