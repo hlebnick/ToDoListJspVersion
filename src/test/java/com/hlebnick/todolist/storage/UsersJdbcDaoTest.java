@@ -19,4 +19,9 @@ public class UsersJdbcDaoTest extends AbstractStorageTest {
 
     }
 
+    @Test
+    public void getUserTest() {
+
+    }
+
 }
