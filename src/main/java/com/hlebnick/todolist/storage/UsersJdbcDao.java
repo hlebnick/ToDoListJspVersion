@@ -31,7 +31,7 @@ public class UsersJdbcDao implements UsersDao {
         params.put("email", email);
 
         List<User> users = jdbcTemplate.query(
-                "select * from users where email = ':email'",
+                "select * from users where email = :email",
                 params,
                 new UserRowMapper()
         );

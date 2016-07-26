@@ -43,7 +43,19 @@ public class UsersJdbcDaoTest extends AbstractStorageTest {
 
     @Test
     public void getUserTest() {
+        String expectedEmail = "email@mail.com";
 
+        assertNull(usersDao.getUser(expectedEmail));
+
+        User user = new User();
+        user.setEmail(expectedEmail);
+        user.setPassword("asklj435g634562");
+
+        usersDao.addUser(user);
+
+        User actualUser = usersDao.getUser(expectedEmail);
+        assertEquals(user.getEmail(), actualUser.getEmail());
+        assertEquals(user.getPassword(), actualUser.getPassword());
     }
 
 }
