@@ -1,6 +1,10 @@
 package com.hlebnick.todolist;
 
+import com.hlebnick.todolist.initializer.WebInitializer;
+import org.eclipse.jetty.annotations.AnnotationConfiguration;
+import org.eclipse.jetty.annotations.ClassInheritanceHandler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.util.ConcurrentHashSet;
 import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
@@ -21,8 +25,8 @@ public class ApplicationRunner {
                     public void preConfigure(WebAppContext context) throws Exception {
                         ClassInheritanceMap map = new ClassInheritanceMap();
                         map.put(WebApplicationInitializer.class.getName(), new ConcurrentHashSet<String>() {{
-                            add(Initializer.class.getName());
-                            add(SpringSecurityInitializer.class.getName());
+                            add(WebInitializer.class.getName());
+//                            add(SpringSecurityInitializer.class.getName());
                         }});
                         context.setAttribute(CLASS_INHERITANCE_MAP, map);
                         _classInheritanceHandler = new ClassInheritanceHandler(map);

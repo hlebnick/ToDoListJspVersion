@@ -13,8 +13,8 @@
         <java-version>1.8</java-version>
         <org.springframework.version>4.3.1.RELEASE</org.springframework.version>
         <org.springframework.security.version>4.1.1.RELEASE</org.springframework.security.version>
-        <org.slf4j.version>1.5.10</org.slf4j.version>
-        <jetty.version>9.3.3.v20150827</jetty.version>
+        <org.slf4j.version>1.6.4</org.slf4j.version>
+        <jetty.version>9.3.0.M1</jetty.version>
     </properties>
 
     <dependencies>
@@ -90,6 +90,11 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>${org.slf4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${org.slf4j.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
@@ -106,6 +111,21 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-jsp</artifactId>
+            <version>9.3.0.M1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-annotations</artifactId>
             <version>${jetty.version}</version>
         </dependency>
 
