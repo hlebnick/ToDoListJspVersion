@@ -25,10 +25,10 @@ public class ApplicationContext {
     @Bean
     public DataSource getDataSource() {
         final BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl(environment.getProperty("database.url"));
-        dataSource.setUsername(environment.getProperty("database.user"));
-        dataSource.setPassword(environment.getProperty("database.password"));
+        dataSource.setDriverClassName(environment.getProperty("jdbc.driverClassName"));
+        dataSource.setUrl(environment.getProperty("jdbc.url"));
+        dataSource.setUsername(environment.getProperty("jdbc.username"));
+        dataSource.setPassword(environment.getProperty("jdbc.password"));
         return dataSource;
     }
 
