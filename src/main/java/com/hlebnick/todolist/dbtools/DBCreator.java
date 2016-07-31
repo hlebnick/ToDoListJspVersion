@@ -1,10 +1,11 @@
 package com.hlebnick.todolist.dbtools;
 
+import com.hlebnick.todolist.config.DataSourceConfig;
 import com.hlebnick.todolist.storage.SqlLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.Collections;
@@ -16,9 +17,10 @@ public class DBCreator {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     public static void main(String[] args) {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("file:src/main/webapp/WEB-INF/spring/application-context.xml");
+        ApplicationContext context = new AnnotationConfigApplicationContext(DataSourceConfig.class);
+
         DBCreator dbCreator = new DBCreator();
-        dbCreator.setJdbcTemplate((NamedParameterJdbcTemplate) applicationContext.getBean("jdbcTemplate"));
+        dbCreator.setJdbcTemplate((NamedParameterJdbcTemplate) context.getBean("jdbcTemplate"));
         dbCreator.run();
     }
 
