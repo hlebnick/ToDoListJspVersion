@@ -10,14 +10,20 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
 
 import javax.sql.DataSource;
 
 @Configuration
+@EnableWebMvc
 @PropertySource("classpath:application.properties")
-@ComponentScan(basePackages = "com.hlebnick.todolist.storage")
+@ComponentScan(basePackages = "com.hlebnick")
 @EnableTransactionManagement
-public class ApplicationContext {
+public class AppConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     private Environment environment;
@@ -30,6 +36,16 @@ public class ApplicationContext {
         dataSource.setUsername(environment.getProperty("jdbc.username"));
         dataSource.setPassword(environment.getProperty("jdbc.password"));
         return dataSource;
+    }
+
+    @Bean
+    public ViewResolver viewResolver() {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setViewClass(JstlView.class);
+        viewResolver.setPrefix("/WEB-INF/views/");
+        viewResolver.setSuffix(".jsp");
+
+        return viewResolver;
     }
 
     @Bean

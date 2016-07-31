@@ -1,5 +1,6 @@
 package com.hlebnick.todolist;
 
+import com.hlebnick.todolist.initializer.SecurityWebInitializer;
 import com.hlebnick.todolist.initializer.WebInitializer;
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.annotations.ClassInheritanceHandler;
@@ -26,7 +27,7 @@ public class ApplicationRunner {
                         ClassInheritanceMap map = new ClassInheritanceMap();
                         map.put(WebApplicationInitializer.class.getName(), new ConcurrentHashSet<String>() {{
                             add(WebInitializer.class.getName());
-//                            add(SpringSecurityInitializer.class.getName());
+                            add(SecurityWebInitializer.class.getName());
                         }});
                         context.setAttribute(CLASS_INHERITANCE_MAP, map);
                         _classInheritanceHandler = new ClassInheritanceHandler(map);

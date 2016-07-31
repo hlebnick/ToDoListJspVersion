@@ -1,14 +1,13 @@
 package com.hlebnick.todolist.initializer;
 
-import com.hlebnick.todolist.config.ApplicationContext;
-import com.hlebnick.todolist.config.MVCConfiguration;
+import com.hlebnick.todolist.config.AppConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[] {ApplicationContext.class, MVCConfiguration.class};
+        return new Class<?>[] {AppConfig.class};
     }
 
     @Override
