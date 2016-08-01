@@ -13,9 +13,8 @@ public class AuthController {
 
     private static final Logger log = Logger.getLogger(AuthController.class);
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public void login(@RequestParam(value = "error", required = false) boolean error, ModelMap model) {
-        log.debug("Received request to show login page");
         if (error) {
             model.put("loginError", "You have entered an invalid username or password!");
         }

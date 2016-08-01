@@ -10,11 +10,18 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityContext extends WebSecurityConfigurerAdapter {
+
+    private final CustomUserDetailsService userDetailsService = new CustomUserDetailsService();
+
+//    @Autowired
+//    PersistentTokenRepository tokenRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -23,15 +30,17 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
 
 //      authentication-failure-url="/auth/login?error=true"
 
-        http.authorizeRequests().antMatchers("/**").permitAll();
-        http.formLogin().loginPage("/signin");
-        http.logout().invalidateHttpSession(true).logoutSuccessUrl("/").logoutUrl("/signout");
+        http.authorizeRequests()
+                .antMatchers("/").hasAnyAuthority()
+                .antMatchers("/auth/login").permitAll();
+        http.formLogin().loginPage("/auth/login");
+        http.logout().invalidateHttpSession(true).logoutSuccessUrl("/").logoutUrl("/logout");
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder authBuilder,
-                                BCryptPasswordEncoder passwordEncoder) throws Exception{
-        authBuilder.userDetailsService(new CustomUserDetailsService())
+                                BCryptPasswordEncoder passwordEncoder) throws Exception {
+        authBuilder.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder);
     }
 
@@ -39,4 +48,9 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+/*    @Bean
+    public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices() {
+        return new PersistentTokenBasedRememberMeServices("remember-me", userDetailsService, tokenRepository);
+    }*/
 }
