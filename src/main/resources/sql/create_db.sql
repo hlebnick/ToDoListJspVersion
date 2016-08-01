@@ -1,4 +1,5 @@
 drop table if exists users;
+drop table if exists persistent_logins;
 drop table if exists todo_list;
 drop table if exists todo_item;
 
@@ -6,6 +7,14 @@ create table users(
   id int auto_increment primary key,
   email varchar(255),
   password varchar(128)
+);
+
+create table persistent_logins (
+    username varchar(64) not null,
+    series varchar(64) not null,
+    token varchar(64) not null,
+    last_used TIMESTAMP not null,
+    primary key (series)
 );
 
 create table todo_list(

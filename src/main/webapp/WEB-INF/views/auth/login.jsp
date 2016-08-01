@@ -10,5 +10,8 @@
         <label for="j_password">Password</label>
         <input id="j_password" name="j_password" type="password"/>
     </p>
+    <p>
+        <label><input type="checkbox" id="rememberme" name="remember-me"> Remember Me</label>
+    </p>
     <input type="submit" value="Login"/>
 </form>
