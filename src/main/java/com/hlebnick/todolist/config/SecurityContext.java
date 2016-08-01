@@ -21,20 +21,26 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 @Import(DataSourceConfig.class)
 public class SecurityContext extends WebSecurityConfigurerAdapter {
 
-    private final CustomUserDetailsService userDetailsService = new CustomUserDetailsService();
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
 
     @Autowired
     private DataSourceConfig dataSourceConfig;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//      authentication-failure-url="/auth/login?error=true"
-
         http.authorizeRequests()
-                .antMatchers("/").hasAnyAuthority()
+                .antMatchers("/").hasAnyRole()
                 .antMatchers("/auth/login").access("isAnonymous()");
 
-        http.formLogin().loginPage("/auth/login");
+        http.formLogin()
+                .loginPage("/auth/login")
+                .loginProcessingUrl("/processLogin")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/app/secure/home")
+                .failureForwardUrl("/auth/login?error=true");
+
         http.logout()
                 .invalidateHttpSession(true)
                 .logoutSuccessUrl("/")
@@ -44,6 +50,8 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
                 .rememberMeParameter("remember-me")
                 .tokenRepository(persistentTokenRepository())
                 .tokenValiditySeconds(86400);
+
+        http.csrf().disable();
     }
 
     @Autowired
@@ -63,5 +71,10 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
         JdbcTokenRepositoryImpl tokenRepositoryImpl = new JdbcTokenRepositoryImpl();
         tokenRepositoryImpl.setDataSource(dataSourceConfig.getDataSource());
         return tokenRepositoryImpl;
+    }
+
+    @Bean
+    public CustomUserDetailsService customUserDetailsService() {
+        return new CustomUserDetailsService();
     }
 }

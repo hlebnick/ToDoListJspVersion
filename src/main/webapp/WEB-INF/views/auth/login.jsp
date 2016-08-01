@@ -1,14 +1,14 @@
 <div id="login-error">${loginError}</div>
 
-<form action="../j_spring_security_check" method="post">
+<form action="/processLogin" method="post">
     <p>
-        <label for="j_username">Email</label>
-        <input id="j_username" name="j_username" type="text"/>
+        <label for="username">Email</label>
+        <input id="username" name="username" type="text"/>
     </p>
 
     <p>
-        <label for="j_password">Password</label>
-        <input id="j_password" name="j_password" type="password"/>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password"/>
     </p>
     <p>
         <label><input type="checkbox" id="rememberme" name="remember-me"> Remember Me</label>

@@ -39,8 +39,8 @@ public class CustomUserDetailsService implements UserDetailsService {
                     authList);
 
         } catch (Exception e) {
-            log.error("Error in retrieving user");
-            throw new UsernameNotFoundException("Error in retrieving user");
+            log.error("Error in retrieving user", e);
+            throw new UsernameNotFoundException("Error in retrieving user", e);
         }
 
         return user;
