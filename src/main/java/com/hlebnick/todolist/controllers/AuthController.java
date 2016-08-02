@@ -15,10 +15,10 @@ public class AuthController {
 
     private static final Logger log = Logger.getLogger(AuthController.class);
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @RequestMapping(value = "/login")
     public String login(@RequestParam(value = "error", required = false) boolean error, ModelMap model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!auth.getAuthorities().toArray()[0].toString().equals("ROLE_ANONYMOUS")) {
+        if (auth != null && !auth.getAuthorities().toArray()[0].toString().equals("ROLE_ANONYMOUS")) {
             log.info("User is authenticated, redirecting to index page");
             return "redirect:../";
         }
