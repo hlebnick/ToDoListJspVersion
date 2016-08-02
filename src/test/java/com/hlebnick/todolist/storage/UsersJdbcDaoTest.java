@@ -1,6 +1,6 @@
 package com.hlebnick.todolist.storage;
 
-import com.hlebnick.todolist.config.AppConfig;
+import com.hlebnick.todolist.config.DataSourceConfig;
 import com.hlebnick.todolist.dao.User;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import java.util.Collections;
 
 import static org.junit.Assert.*;
 
-@ContextConfiguration(classes = AppConfig.class)
+@ContextConfiguration(classes = DataSourceConfig.class)
 public class UsersJdbcDaoTest extends AbstractStorageTest {
 
     @Autowired

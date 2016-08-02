@@ -10,7 +10,7 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableWebMvc
 @PropertySource("classpath:application.properties")
-@ComponentScan(basePackages = "com.hlebnick")
+@ComponentScan(basePackages = {"com.hlebnick.todolist"})
 @Import(DataSourceConfig.class)
 public class AppConfig extends WebMvcConfigurerAdapter {
 
