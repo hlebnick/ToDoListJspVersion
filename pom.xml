@@ -61,7 +61,6 @@
             <version>${org.springframework.security.version}</version>
         </dependency>
 
-
         <!-- DataSource -->
         <dependency>
             <groupId>commons-dbcp</groupId>
@@ -72,6 +71,18 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.190</version>
+        </dependency>
+
+        <!-- Beans validation -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>4.0.2.GA</version>
         </dependency>
 
         <!-- SLF4J Related -->

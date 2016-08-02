@@ -1,6 +1,6 @@
 <div id="login-error">${loginError}</div>
 
-<form action="/processLogin" method="post">
+<form action="/process-login" method="post">
     <p>
         <label for="username">Email</label>
         <input id="username" name="username" type="text"/>
@@ -15,3 +15,8 @@
     </p>
     <input type="submit" value="Login"/>
 </form>
+
+<br/>
+<br/>
+
+Or <a href="/register">Register</a>

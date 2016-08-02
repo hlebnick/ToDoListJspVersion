@@ -31,15 +31,15 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").hasAuthority("USER")
-                .antMatchers("/auth/login").permitAll();
+                .antMatchers("/login").permitAll();
 
         http.formLogin()
-                .loginPage("/auth/login")
-                .loginProcessingUrl("/processLogin")
+                .loginPage("/login")
+                .loginProcessingUrl("/process-login")
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/")
-                .failureForwardUrl("/auth/login?error=true");
+                .failureForwardUrl("/login?error=true");
 
         http.logout()
                 .invalidateHttpSession(true)
