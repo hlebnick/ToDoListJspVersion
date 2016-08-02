@@ -4,6 +4,7 @@ import com.hlebnick.todolist.storage.UsersDao;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,7 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             com.hlebnick.todolist.dao.User dbUser = usersDao.getUser(email);
 
             List<GrantedAuthority> authList = new ArrayList<>();
-//            authList.add(new GrantedAuthorityImpl(dbUser.getUserRole().name()));
+            authList.add(new SimpleGrantedAuthority("USER"));
 
             user = new User(
                     dbUser.getEmail(),

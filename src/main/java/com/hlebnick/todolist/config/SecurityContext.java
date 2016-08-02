@@ -30,7 +30,7 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/").hasAnyRole()
+                .antMatchers("/").hasAuthority("USER")
                 .antMatchers("/auth/login").access("isAnonymous()");
 
         http.formLogin()
@@ -38,12 +38,12 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/processLogin")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/app/secure/home")
+                .defaultSuccessUrl("/")
                 .failureForwardUrl("/auth/login?error=true");
 
         http.logout()
                 .invalidateHttpSession(true)
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/index")
                 .logoutUrl("/logout");
 
         http.rememberMe()
