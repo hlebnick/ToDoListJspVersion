@@ -31,6 +31,7 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").hasAuthority("USER")
+                .antMatchers("/list**").hasAuthority("USER")
                 .antMatchers("/login").permitAll();
 
         http.formLogin()

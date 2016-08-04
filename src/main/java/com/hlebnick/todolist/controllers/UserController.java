@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 
 @Controller
-@RequestMapping("/")
 public class UserController {
 
     private static final Logger log = Logger.getLogger(UserController.class);

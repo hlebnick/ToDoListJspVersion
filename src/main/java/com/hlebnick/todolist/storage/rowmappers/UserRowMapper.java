@@ -1,4 +1,4 @@
-package com.hlebnick.todolist.storage;
+package com.hlebnick.todolist.storage.rowmappers;
 
 import com.hlebnick.todolist.dao.User;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
