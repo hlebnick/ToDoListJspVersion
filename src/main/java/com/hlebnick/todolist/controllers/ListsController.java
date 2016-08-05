@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -46,6 +47,17 @@ public class ListsController {
         listsDao.createList(BeansConverter.convertRequestToList(listRequest), getCurrentUsername());
         log.info("List [" + listRequest.getName() + "] was created");
 
+        return "redirect:/list";
+    }
+
+    @RequestMapping(value = "/{id}/remove", method = RequestMethod.GET)
+    public String remove(@PathVariable Integer id) {
+        log.info("Removing list with id [" + id + "]");
+        if (listsDao.hasPermissionForList(getCurrentUsername(), id)) {
+            listsDao.removeList(id);
+        } else {
+            log.warn("User has no permissions to remove list [" + id + "]");
+        }
         return "redirect:/list";
     }
 

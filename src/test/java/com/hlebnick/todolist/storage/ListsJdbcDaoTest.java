@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @ContextConfiguration(classes = DataSourceConfig.class)
 public class ListsJdbcDaoTest extends AbstractStorageTest {
@@ -77,6 +79,38 @@ public class ListsJdbcDaoTest extends AbstractStorageTest {
         listsDao.createList(list, TEST_EMAIL);
         count = listsDao.getLists(TEST_EMAIL).size();
         assertEquals(2, count);
+    }
+
+    @Test
+    public void testRemove() {
+        listsDao.removeList(1);
+
+        createUser(TEST_EMAIL);
+        ToDoList list = new ToDoList();
+        list.setName("list");
+
+        int listId = listsDao.createList(list, TEST_EMAIL);
+        int count = listsDao.getLists(TEST_EMAIL).size();
+        assertEquals(1, count);
+
+        listsDao.removeList(listId);
+
+        count = listsDao.getLists(TEST_EMAIL).size();
+        assertEquals(0, count);
+    }
+
+    @Test
+    public void hasPermissionsForListTest() {
+        createUser(TEST_EMAIL);
+        createUser(TEST_EMAIL2);
+
+        ToDoList list = new ToDoList();
+        list.setName("list");
+
+        int listId = listsDao.createList(list, TEST_EMAIL);
+
+        assertTrue(listsDao.hasPermissionForList(TEST_EMAIL, listId));
+        assertFalse(listsDao.hasPermissionForList(TEST_EMAIL2, listId));
     }
 
     private void createUser(String email) {

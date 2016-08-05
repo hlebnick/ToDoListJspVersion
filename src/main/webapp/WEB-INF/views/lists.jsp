@@ -7,6 +7,7 @@ Here is your ToDo lists:
     <c:forEach var="list" items="${lists}">
         <a href="/list/<c:out value="${list.id}"/>"><c:out value="${list.name}"/></a>
         <a href="/list/<c:out value="${list.id}"/>/edit">Edit</a>
+        <a href="/list/<c:out value="${list.id}/remove"/>">Remove</a>
         <br/>
     </c:forEach>
 </c:if>

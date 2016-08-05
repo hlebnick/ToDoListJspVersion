@@ -64,4 +64,35 @@ public class ListsJdbcDao implements ListsDao {
         log.info("List [" + list.getName() + "] was inserted to database with id [" + id + "]");
         return id;
     }
+
+    @Override
+    public boolean hasPermissionForList(String email, Integer id) {
+        log.debug("Checking permissions for user [" + email + "] to list with id [" + id + "]");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("email", email);
+        params.put("id", id);
+
+        Integer count = jdbcTemplate.queryForObject("select count(*) from todo_list l, users u " +
+                        "where l.user_id = u.id " +
+                        "and u.email = :email " +
+                        "and l.id = :id",
+                params, Integer.class);
+
+        return count == 1;
+    }
+
+    @Override
+    public void removeList(Integer id) {
+        log.debug("Removing list with id [" + id + "]");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", id);
+
+        jdbcTemplate.update(
+                "delete from todo_list where id = :id",
+                params
+        );
+    }
+
 }
