@@ -18,14 +18,14 @@ create table persistent_logins (
 );
 
 create table todo_list(
-  id int primary key,
+  id int auto_increment primary key,
   user_id int,
   list_name varchar(255),
   foreign key(user_id) references users(id)
 );
 
 create table todo_item(
-  id int primary key,
+  id int auto_increment primary key,
   list_id int,
   item_name varchar(255),
   done boolean,

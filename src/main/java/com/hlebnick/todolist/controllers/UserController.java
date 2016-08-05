@@ -1,8 +1,8 @@
 package com.hlebnick.todolist.controllers;
 
+import com.hlebnick.todolist.dao.BeansConverter;
 import com.hlebnick.todolist.dao.RegistrationRequest;
 import com.hlebnick.todolist.dao.User;
-import com.hlebnick.todolist.dao.UserBeansConverter;
 import com.hlebnick.todolist.storage.UsersDao;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class UserController {
             return "register";
         }
         log.debug("Registering user");
-        usersDao.addUser(UserBeansConverter.convertRequestToUser(registrationRequest));
+        usersDao.addUser(BeansConverter.convertRequestToUser(registrationRequest));
 
         authUser(registrationRequest.getEmail());
         return "/";

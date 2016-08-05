@@ -7,4 +7,6 @@ import java.util.List;
 public interface ListsDao {
 
     List<ToDoList> getLists(String username);
+
+    int createList(ToDoList toDoList, String username);
 }

@@ -1,26 +1,61 @@
 package com.hlebnick.todolist.controllers;
 
+import com.hlebnick.todolist.dao.BeansConverter;
+import com.hlebnick.todolist.dao.ListRequest;
+import com.hlebnick.todolist.dao.ToDoList;
 import com.hlebnick.todolist.storage.ListsDao;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/list")
 public class ListsController {
+
+    private static final Logger log = Logger.getLogger(ListsController.class);
 
     @Autowired
     private ListsDao listsDao;
 
     @RequestMapping(value = "")
     public String list(ModelMap model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = ((User) auth.getPrincipal()).getUsername();
-        model.put("lists", listsDao.getLists(username));
+        model.put("lists", getToDoListsForCurrentUser());
+        model.put("listRequest", new ListRequest());
         return "lists";
+    }
+
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public String create(ModelMap model, @Valid ListRequest listRequest, BindingResult result) {
+        log.info("Creating new ToDoList");
+        if (result.hasErrors()) {
+            model.put("listRequest", listRequest);
+            model.put("lists", getToDoListsForCurrentUser());
+            return "lists";
+        }
+
+        listsDao.createList(BeansConverter.convertRequestToList(listRequest), getCurrentUsername());
+        log.info("List [" + listRequest.getName() + "] was created");
+
+        return "redirect:/list";
+    }
+
+    private List<ToDoList> getToDoListsForCurrentUser() {
+        String username = getCurrentUsername();
+        return listsDao.getLists(username);
+    }
+
+    private String getCurrentUsername() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return ((User) auth.getPrincipal()).getUsername();
     }
 }

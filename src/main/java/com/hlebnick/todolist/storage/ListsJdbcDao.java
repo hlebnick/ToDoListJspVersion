@@ -4,7 +4,11 @@ import com.hlebnick.todolist.dao.ToDoList;
 import com.hlebnick.todolist.storage.rowmappers.ListRowMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -36,5 +40,28 @@ public class ListsJdbcDao implements ListsDao {
         log.debug("Lists by email [" + email + "] found: " + users.size());
 
         return users;
+    }
+
+    @Override
+    public int createList(ToDoList list, String username) {
+        log.debug("Adding new list to database");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", list.getName());
+        params.put("username", username);
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        SqlParameterSource parameterSource = new MapSqlParameterSource(params);
+
+        jdbcTemplate.update(
+                "insert into todo_list (user_id, list_name) " +
+                        "values (select id from users where email = :username, :name);",
+                parameterSource,
+                keyHolder
+        );
+
+        int id = keyHolder.getKey().intValue();
+        log.info("List [" + list.getName() + "] was inserted to database with id [" + id + "]");
+        return id;
     }
 }

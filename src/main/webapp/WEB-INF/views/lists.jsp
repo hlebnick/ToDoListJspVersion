@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 Here is your ToDo lists:
 <br/>
@@ -13,4 +14,12 @@ Here is your ToDo lists:
 <br/>
 <br/>
 
-<a href="/list/create">Create New List</a>
+
+<form:form method="post" action="/list/create" commandName="listRequest">
+    <font color="Red">
+        <form:errors path="name" /><br/>
+    </font>
+    <form:input path="name" /><br/>
+
+    <input type="submit" value="Create new list"/>
+</form:form>
