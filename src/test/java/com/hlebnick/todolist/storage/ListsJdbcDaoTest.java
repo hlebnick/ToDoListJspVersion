@@ -11,9 +11,8 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 @ContextConfiguration(classes = DataSourceConfig.class)
 public class ListsJdbcDaoTest extends AbstractStorageTest {
@@ -111,6 +110,43 @@ public class ListsJdbcDaoTest extends AbstractStorageTest {
 
         assertTrue(listsDao.hasPermissionForList(TEST_EMAIL, listId));
         assertFalse(listsDao.hasPermissionForList(TEST_EMAIL2, listId));
+    }
+
+    @Test
+    public void testGetList() {
+        createUser(TEST_EMAIL);
+
+        ToDoList list = new ToDoList();
+        String listName = "list";
+        list.setName(listName);
+
+        assertNull(listsDao.getList(1));
+
+        int listId = listsDao.createList(list, TEST_EMAIL);
+
+        ToDoList actualList = listsDao.getList(listId);
+        assertNotNull(actualList);
+        assertEquals(listName, actualList.getName());
+    }
+
+    @Test
+    public void updateListTest() {
+        createUser(TEST_EMAIL);
+
+        ToDoList list = new ToDoList();
+        String listName = "list";
+        list.setName(listName);
+
+        int listId = listsDao.createList(list, TEST_EMAIL);
+        ToDoList actualList = listsDao.getList(listId);
+        assertEquals(listName, actualList.getName());
+
+        String anotherListName = "anotherName";
+        actualList.setName(anotherListName);
+        listsDao.updateList(actualList);
+
+        actualList = listsDao.getList(listId);
+        assertEquals(anotherListName, actualList.getName());
     }
 
     private void createUser(String email) {

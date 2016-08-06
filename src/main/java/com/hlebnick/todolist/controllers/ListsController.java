@@ -61,6 +61,31 @@ public class ListsController {
         return "redirect:/list";
     }
 
+    @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+    public String edit(@PathVariable Integer id, ModelMap model) {
+        if (!listsDao.hasPermissionForList(getCurrentUsername(), id)) {
+            return "redirect:/list";
+        }
+        ToDoList toDoList = listsDao.getList(id);
+        if (toDoList == null) {
+            return "redirect:/list";
+        }
+        model.put("listRequest", BeansConverter.convertListToRequest(toDoList));
+        return "edit-list";
+    }
+
+    @RequestMapping(value = "processEdit", method = RequestMethod.POST)
+    public String processEdit(@Valid ListRequest listRequest, BindingResult result, ModelMap model) {
+        log.info("Editing ToDoList");
+        if (result.hasErrors()) {
+            model.put("listRequest", listRequest);
+            return "edit-list";
+        }
+        listsDao.updateList(BeansConverter.convertRequestToList(listRequest));
+
+        return "redirect:/list";
+    }
+
     private List<ToDoList> getToDoListsForCurrentUser() {
         String username = getCurrentUsername();
         return listsDao.getLists(username);

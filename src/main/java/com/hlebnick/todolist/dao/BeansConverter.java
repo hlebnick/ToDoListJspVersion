@@ -13,7 +13,15 @@ public class BeansConverter {
 
     public static ToDoList convertRequestToList(ListRequest listRequest) {
         ToDoList list = new ToDoList();
+        list.setId(listRequest.getId());
         list.setName(listRequest.getName());
         return list;
+    }
+
+    public static ListRequest convertListToRequest(ToDoList toDoList) {
+        ListRequest listRequest = new ListRequest();
+        listRequest.setId(toDoList.getId());
+        listRequest.setName(toDoList.getName());
+        return listRequest;
     }
 }

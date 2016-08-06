@@ -4,6 +4,7 @@ import com.hlebnick.todolist.dao.ToDoList;
 import com.hlebnick.todolist.storage.rowmappers.ListRowMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -22,6 +23,7 @@ public class ListsJdbcDao implements ListsDao {
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
+    private ListRowMapper listRowMapper = new ListRowMapper();
 
     @Override
     public List<ToDoList> getLists(String email) {
@@ -30,12 +32,13 @@ public class ListsJdbcDao implements ListsDao {
         Map<String, Object> params = new HashMap<>();
         params.put("email", email);
 
+        listRowMapper = new ListRowMapper();
         List<ToDoList> users = jdbcTemplate.query(
                 "select l.id, l.list_name as name from todo_list l, users " +
                 "where l.user_id = users.id " +
                 "and users.email = :email",
                 params,
-                new ListRowMapper()
+                listRowMapper
         );
         log.debug("Lists by email [" + email + "] found: " + users.size());
 
@@ -93,6 +96,40 @@ public class ListsJdbcDao implements ListsDao {
                 "delete from todo_list where id = :id",
                 params
         );
+    }
+
+    @Override
+    public ToDoList getList(Integer id) {
+        log.debug("Getting ToDoList by id [" + id + "]");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", id);
+
+        List<ToDoList> lists = jdbcTemplate.query("select id, list_name as name from todo_list where id = :id",
+                params, listRowMapper);
+
+        if (lists.size() == 1) {
+            return lists.get(0);
+        } else if (lists.size() > 1) {
+            log.debug("More than 1 list with id [" + id + "]. count: " + lists.size());
+            throw new IncorrectResultSizeDataAccessException(1, lists.size());
+        } else {
+            String msg = "No lists with id [" + id + "] found.";
+            log.error(msg);
+            return null;
+        }
+    }
+
+    @Override
+    public void updateList(ToDoList toDoList) {
+        log.debug("Editing ToDoList with id [" + toDoList.getId() + "]");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", toDoList.getId());
+        params.put("name", toDoList.getName());
+
+        jdbcTemplate.update("update todo_list set list_name = :name where id = :id",
+                params);
     }
 
 }

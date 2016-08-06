@@ -13,4 +13,8 @@ public interface ListsDao {
     boolean hasPermissionForList(String email, Integer id);
 
     void removeList(Integer id);
+
+    ToDoList getList(Integer id);
+
+    void updateList(ToDoList toDoList);
 }
