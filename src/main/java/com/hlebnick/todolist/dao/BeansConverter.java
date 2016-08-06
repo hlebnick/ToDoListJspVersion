@@ -1,5 +1,8 @@
 package com.hlebnick.todolist.dao;
 
+import com.hlebnick.todolist.dao.requests.ItemRequest;
+import com.hlebnick.todolist.dao.requests.ListRequest;
+import com.hlebnick.todolist.dao.requests.RegistrationRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class BeansConverter {
@@ -23,5 +26,11 @@ public class BeansConverter {
         listRequest.setId(toDoList.getId());
         listRequest.setName(toDoList.getName());
         return listRequest;
+    }
+
+    public static ToDoItem convertRequestToItem(ItemRequest itemRequest) {
+        ToDoItem item = new ToDoItem();
+        item.setName(itemRequest.getName());
+        return item;
     }
 }

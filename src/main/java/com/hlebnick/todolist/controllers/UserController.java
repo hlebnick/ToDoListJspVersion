@@ -1,7 +1,7 @@
 package com.hlebnick.todolist.controllers;
 
 import com.hlebnick.todolist.dao.BeansConverter;
-import com.hlebnick.todolist.dao.RegistrationRequest;
+import com.hlebnick.todolist.dao.requests.RegistrationRequest;
 import com.hlebnick.todolist.dao.User;
 import com.hlebnick.todolist.storage.UsersDao;
 import org.apache.log4j.Logger;

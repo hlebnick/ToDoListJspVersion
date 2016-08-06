@@ -1,14 +1,13 @@
 package com.hlebnick.todolist.controllers;
 
-import com.hlebnick.todolist.dao.BeansConverter;
-import com.hlebnick.todolist.dao.ListRequest;
-import com.hlebnick.todolist.dao.ToDoList;
+import com.hlebnick.todolist.dao.*;
+import com.hlebnick.todolist.dao.requests.ItemRequest;
+import com.hlebnick.todolist.dao.requests.ListRequest;
+import com.hlebnick.todolist.storage.ItemsDao;
 import com.hlebnick.todolist.storage.ListsDao;
+import com.hlebnick.todolist.util.SecurityUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -28,6 +27,9 @@ public class ListsController {
     @Autowired
     private ListsDao listsDao;
 
+    @Autowired
+    private ItemsDao itemsDao;
+
     @RequestMapping(value = "")
     public String list(ModelMap model) {
         model.put("lists", getToDoListsForCurrentUser());
@@ -44,7 +46,7 @@ public class ListsController {
             return "lists";
         }
 
-        listsDao.createList(BeansConverter.convertRequestToList(listRequest), getCurrentUsername());
+        listsDao.createList(BeansConverter.convertRequestToList(listRequest), SecurityUtil.getCurrentUsername());
         log.info("List [" + listRequest.getName() + "] was created");
 
         return "redirect:/list";
@@ -53,7 +55,7 @@ public class ListsController {
     @RequestMapping(value = "/{id}/remove", method = RequestMethod.GET)
     public String remove(@PathVariable Integer id) {
         log.info("Removing list with id [" + id + "]");
-        if (listsDao.hasPermissionForList(getCurrentUsername(), id)) {
+        if (listsDao.hasPermissionForList(SecurityUtil.getCurrentUsername(), id)) {
             listsDao.removeList(id);
         } else {
             log.warn("User has no permissions to remove list [" + id + "]");
@@ -63,7 +65,7 @@ public class ListsController {
 
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
     public String edit(@PathVariable Integer id, ModelMap model) {
-        if (!listsDao.hasPermissionForList(getCurrentUsername(), id)) {
+        if (!listsDao.hasPermissionForList(SecurityUtil.getCurrentUsername(), id)) {
             return "redirect:/list";
         }
         ToDoList toDoList = listsDao.getList(id);
@@ -74,7 +76,7 @@ public class ListsController {
         return "edit-list";
     }
 
-    @RequestMapping(value = "processEdit", method = RequestMethod.POST)
+    @RequestMapping(value = "/processEdit", method = RequestMethod.POST)
     public String processEdit(@Valid ListRequest listRequest, BindingResult result, ModelMap model) {
         log.info("Editing ToDoList");
         if (result.hasErrors()) {
@@ -86,13 +88,23 @@ public class ListsController {
         return "redirect:/list";
     }
 
-    private List<ToDoList> getToDoListsForCurrentUser() {
-        String username = getCurrentUsername();
-        return listsDao.getLists(username);
+    @RequestMapping(value = "/{id}")
+    public String view(@PathVariable Integer id, ModelMap model) {
+        log.info("View list with id [" + id + "]");
+
+        if (!listsDao.hasPermissionForList(SecurityUtil.getCurrentUsername(), id)) {
+            return "redirect:/list";
+        }
+
+        List<ToDoItem> items = itemsDao.getItemsFromList(id);
+        model.put("items", items);
+        model.put("list", listsDao.getList(id));
+        model.put("itemRequest", new ItemRequest());
+
+        return "view";
     }
 
-    private String getCurrentUsername() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return ((User) auth.getPrincipal()).getUsername();
+    private List<ToDoList> getToDoListsForCurrentUser() {
+        return listsDao.getLists(SecurityUtil.getCurrentUsername());
     }
 }

@@ -9,7 +9,6 @@ import java.sql.SQLException;
 
 public class ListRowMapper implements RowMapper<ToDoList> {
 
-
     private static final BeanPropertyRowMapper<ToDoList> LIST_MAPPER = BeanPropertyRowMapper.newInstance(ToDoList.class);
 
     @Override

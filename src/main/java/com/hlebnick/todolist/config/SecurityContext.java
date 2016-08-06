@@ -32,6 +32,7 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/").hasAuthority("USER")
                 .antMatchers("/list**").hasAuthority("USER")
+                .antMatchers("/list/**").hasAuthority("USER")
                 .antMatchers("/login").permitAll();
 
         http.formLogin()

@@ -1,4 +1,4 @@
-package com.hlebnick.todolist.dao;
+package com.hlebnick.todolist.dao.requests;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
