@@ -90,4 +90,16 @@ public class ItemsJdbcDao implements ItemsDao {
         return count == 1;
     }
 
+    @Override
+    public void changeStatus(Integer itemId, Boolean status) {
+        log.debug("Changing status to [" + status + "] for item [" + itemId + "]");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", itemId);
+        params.put("status", status);
+
+        template.update("update todo_item set done = :status where id = :id",
+                params);
+    }
+
 }

@@ -13,4 +13,6 @@ public interface ItemsDao {
     void remove(Integer itemId);
 
     boolean hasPermissionForItem(String username, Integer itemId);
+
+    void changeStatus(Integer itemId, Boolean status);
 }

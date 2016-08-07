@@ -64,4 +64,18 @@ public class ItemController {
 
         return "redirect:/list/" + listId;
     }
+
+    @RequestMapping(value = "/list/{listId}/item/{itemId}/status/{status}")
+    public String changeStatus(@PathVariable Integer listId, @PathVariable Integer itemId, @PathVariable Boolean status) {
+        log.info("Changing status for item [" + itemId + "]");
+
+        String username = SecurityUtil.getCurrentUsername();
+        if (!itemsDao.hasPermissionForItem(username, itemId)) {
+            log.info("User [" + username + "] has no permissions to change item [" + itemId + "]");
+        } else {
+            itemsDao.changeStatus(itemId, status);
+        }
+
+        return "redirect:/list/" + listId;
+    }
 }

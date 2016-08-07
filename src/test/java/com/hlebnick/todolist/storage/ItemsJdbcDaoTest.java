@@ -115,6 +115,20 @@ public class ItemsJdbcDaoTest extends AbstractStorageTest {
         Assert.assertTrue(itemsDao.hasPermissionForItem(TEST_EMAIL2, itemId2));
     }
 
+    @Test
+    public void changeStatusTest() {
+        int listId = createList(TEST_EMAIL);
+        int itemId = createItem(listId);
+
+        Assert.assertFalse(itemsDao.getItemsFromList(listId).get(0).isDone());
+
+        itemsDao.changeStatus(itemId, false);
+        Assert.assertFalse(itemsDao.getItemsFromList(listId).get(0).isDone());
+
+        itemsDao.changeStatus(itemId, true);
+        Assert.assertTrue(itemsDao.getItemsFromList(listId).get(0).isDone());
+    }
+
     private int createItem(int listId) {
         ToDoItem item = new ToDoItem();
         item.setListId(listId);

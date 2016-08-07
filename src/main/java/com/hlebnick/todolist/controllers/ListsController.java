@@ -8,9 +8,11 @@ import com.hlebnick.todolist.storage.ListsDao;
 import com.hlebnick.todolist.util.SecurityUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.authentication.rememberme.CookieTheftException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -102,6 +104,11 @@ public class ListsController {
         model.put("itemRequest", new ItemRequest());
 
         return "view";
+    }
+
+    @ExceptionHandler(CookieTheftException.class)
+    public String handleCookieTheftException() {
+        return "/ololo";
     }
 
     private List<ToDoList> getToDoListsForCurrentUser() {
