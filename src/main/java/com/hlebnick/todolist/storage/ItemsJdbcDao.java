@@ -61,4 +61,33 @@ public class ItemsJdbcDao implements ItemsDao {
         return id;
     }
 
+    @Override
+    public void remove(Integer itemId) {
+        log.debug("Removing item [" + itemId + "]");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", itemId);
+
+        template.update("delete from todo_item where id = :id",
+                params);
+    }
+
+    @Override
+    public boolean hasPermissionForItem(String email, Integer id) {
+        log.debug("Checking permissions for user [" + email + "] to item with id [" + id + "]");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("email", email);
+        params.put("id", id);
+
+        Integer count = template.queryForObject("select count(*) from todo_item i, todo_list l, users u " +
+                        "where u.email = :email " +
+                        "and u.id = l.user_id " +
+                        "and l.id = i.list_id " +
+                        "and i.id = :id",
+                params, Integer.class);
+
+        return count == 1;
+    }
+
 }

@@ -9,4 +9,8 @@ public interface ItemsDao {
     List<ToDoItem> getItemsFromList(Integer id);
 
     int createItem(ToDoItem toDoItem);
+
+    void remove(Integer itemId);
+
+    boolean hasPermissionForItem(String username, Integer itemId);
 }

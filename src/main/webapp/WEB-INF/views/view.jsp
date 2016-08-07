@@ -9,7 +9,7 @@ viewing your list ${list.name}
     <c:forEach var="item" items="${items}">
         <a href="/item/<c:out value="${item.id}"/>"><c:out value="${item.name}"/></a> <c:out value="${item.done}"/>
         <a href="/item/<c:out value="${item.id}"/>/edit">Edit</a>
-        <a href="/item/<c:out value="${item.id}/remove"/>">Remove</a>
+        <a href="/list/<c:out value="${list.id}"/>/item/<c:out value="${item.id}"/>/remove">Remove</a>
         <br/>
     </c:forEach>
 </c:if>

@@ -50,4 +50,18 @@ public class ItemController {
 
         return "redirect:/list/" + listId;
     }
+
+    @RequestMapping(value = "/list/{listId}/item/{itemId}/remove")
+    public String remove(@PathVariable Integer itemId, @PathVariable Integer listId) {
+        log.info("Removing item [" + itemId + "]");
+
+        String username = SecurityUtil.getCurrentUsername();
+        if (!itemsDao.hasPermissionForItem(username, itemId)) {
+            log.info("User [" + username + "] has no permissions to remove item [" + itemId + "]");
+        } else {
+            itemsDao.remove(itemId);
+        }
+
+        return "redirect:/list/" + listId;
+    }
 }
