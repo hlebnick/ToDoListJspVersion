@@ -106,11 +106,6 @@ public class ListsController {
         return "view";
     }
 
-    @ExceptionHandler(CookieTheftException.class)
-    public String handleCookieTheftException() {
-        return "/ololo";
-    }
-
     private List<ToDoList> getToDoListsForCurrentUser() {
         return listsDao.getLists(SecurityUtil.getCurrentUsername());
     }
